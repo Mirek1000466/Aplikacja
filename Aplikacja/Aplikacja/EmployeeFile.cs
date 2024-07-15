@@ -88,7 +88,6 @@ namespace Aplikacja
                 default: 
                     {
                         throw new Exception("BŁĄD [A..F]/[a..f]");
-                        break;
                     }
             }
         }

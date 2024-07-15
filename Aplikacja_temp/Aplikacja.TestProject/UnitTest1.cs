@@ -1,16 +1,14 @@
-using System.Xml.Linq;
-
-namespace Aplikacja.Tests
+namespace Aplikacja.TestProject
 {
     public class Tests
     {
+        
         [Test]
         public void WhenStringAdded_ShouldAddedPoints()
-        {
+        {   
             // arrange
             var employee = new EmployeeMemory("Jan", "Nowak", "15-08-2001", "Mê¿czyzna");
             employee.AddGrade("38,75");
-
 
             // act
             var statistics = employee.GetStatistics();
@@ -22,7 +20,7 @@ namespace Aplikacja.Tests
             Assert.AreEqual('B', statistics.AverageLetter);
         }
 
-        [Test1]
+        [Test]
         public void WhenCharAdded_ShouldAddedpoints()
         {
             // arrange
@@ -39,7 +37,7 @@ namespace Aplikacja.Tests
             Assert.AreEqual(50, statistics.Average);
             Assert.AreEqual('A', statistics.AverageLetter);
         }
-        [Test2]
+        [Test]
         public void WhenForPointsAdded_ShouldReturnMinimumMaximumAverageAverageLetter()
         {
             // arrange
