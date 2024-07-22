@@ -1,5 +1,3 @@
-using System.Xml.Linq;
-
 namespace Aplikacja.Tests
 {
     public class Tests
@@ -22,7 +20,7 @@ namespace Aplikacja.Tests
             Assert.AreEqual('B', statistics.AverageLetter);
         }
 
-        [Test1]
+        [Test]
         public void WhenCharAdded_ShouldAddedpoints()
         {
             // arrange
@@ -39,7 +37,8 @@ namespace Aplikacja.Tests
             Assert.AreEqual(50, statistics.Average);
             Assert.AreEqual('A', statistics.AverageLetter);
         }
-        [Test2]
+
+        [Test]
         public void WhenForPointsAdded_ShouldReturnMinimumMaximumAverageAverageLetter()
         {
             // arrange

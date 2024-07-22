@@ -474,8 +474,9 @@ void LoadEmployee(char c)
                     switch (key.Key)
                     {
                         case ConsoleKey.Escape:
-                            {
-                                FileEmployee(2);
+                            { 
+                                if (c == 'k') FileEmployee(3);
+                                else FileEmployee(2);
                                 break;
                             }
                         case ConsoleKey.DownArrow:
@@ -529,7 +530,13 @@ void LoadEmployee(char c)
                             {
                                 if (c == 'k')
                                 {
-                                    //File.Delete(txtFiles[positionInList]);
+                                    string asa = Directory.GetCurrentDirectory();
+                                    File.Delete(txtFiles[positionInList]);
+                                    string[] nowaTablica = new string[txtFiles.Length - 1]; // Tworzę nową tablicę o rozmiarze mniejszym o jeden
+                                    Array.Copy(txtFiles, 0, nowaTablica, 0, positionInList); // Kopiujemy elementy przed elementem który chcemy usunąć
+                                    Array.Copy(txtFiles, positionInList + 1, nowaTablica, positionInList, txtFiles.Length - positionInList - 1); // Kopiujemy elementy po elemencie który chcemy usunąć
+                                    txtFiles = nowaTablica; // Aktualizujemy referencję tablicy
+
                                     employeeList.Remove(employeeList[positionInList]);
                                     CleanWindow(x + 1, y + 1, 25, 15, 0, 0);
                                     if (positionInList <= 14) 
@@ -1373,6 +1380,6 @@ void MenuFrame(int y, int poz)
         }
     }
 }
-SplashScreen(10,70,1300);
+//SplashScreen(10,70,1300);
 MainMenu(9, 1);
 MenuFrame(7, 1);
