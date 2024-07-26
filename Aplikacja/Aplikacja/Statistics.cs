@@ -37,7 +37,6 @@ namespace Aplikacja
                         return 'E';
                     default: return 'F';
                 }
-                return AverageLetter; 
             }
         }
         public Statistics() 

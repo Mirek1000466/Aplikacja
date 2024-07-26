@@ -9,7 +9,7 @@ namespace Aplikacja
         public EmployeeFile(string name, string surname, string dateOfBirth, string sex, string fileName)
             : base(name, surname, dateOfBirth, sex)
         {
-            this.FileName = fileName;
+            this.FileName = fileName; 
         }
         public string FileName { get; private set; }
 

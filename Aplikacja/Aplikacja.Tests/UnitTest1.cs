@@ -25,7 +25,7 @@ namespace Aplikacja.Tests
         {
             // arrange
             var employee = new EmployeeMemory("Jan", "Nowak", "15-08-2001", "Mê¿czyzna");
-            employee.AddGrade('A');
+            employee.AddGrade('A'); 
 
             // act
             var user = employee.GetStatistics();

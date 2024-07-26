@@ -16,7 +16,7 @@
 
         public string Surname { get; private set; }
 
-        public string DateOfBirth { get; private set; }
+        public string DateOfBirth { get; private set; } 
 
         public string Sex { get; private set; }
 

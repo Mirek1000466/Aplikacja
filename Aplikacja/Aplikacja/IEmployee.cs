@@ -6,7 +6,7 @@ namespace Aplikacja
     {
         event GradeAddedDelegate GradeAdded;
         string Name { get;}
-        string Surname { get;}
+        string Surname { get;} 
         string DateOfBirth { get;}
         string Sex { get;}
         void AddGrade(double grade);

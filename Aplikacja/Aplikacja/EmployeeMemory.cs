@@ -14,7 +14,7 @@
         }
         public override void AddGrade(float grade) 
         {
-            if (grade >= 0 && grade <= 50)
+            if (grade >= 0 && grade <= 50) 
             {
                 grades.Add(grade);
                 if (GradeAdded != null) GradeAdded(this, new EventArgs());

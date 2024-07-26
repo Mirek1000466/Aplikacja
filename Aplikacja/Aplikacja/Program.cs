@@ -10,7 +10,7 @@ void SplashScreen(int pozycjaY, int zwloka, int czekaj)
 {
     string[] lineSplashScreen = { "Program do oceny pracowników. Skala ocen [50..0] lub A=50, B=40, C=30, D=20, E=10 i F=0.",
                                   "Oceny można dodawać w pamięci (nie będą przechowywane) lub",
-                                  "w pliku (możliwy dostęp do danych w dowolnej chwili)."};
+                                  "w pliku (możliwy dostęp do ocen w dowolnej chwili)."};
     var maxLengthLine = Math.Max(lineSplashScreen[0].Length, lineSplashScreen[1].Length);
     maxLengthLine = Math.Max(maxLengthLine, lineSplashScreen[2].Length);
     Console.CursorVisible = false;
@@ -1380,6 +1380,6 @@ void MenuFrame(int y, int poz)
         }
     }
 }
-//SplashScreen(10,70,1300);
+SplashScreen(10,70,1300);
 MainMenu(9, 1);
 MenuFrame(7, 1);
