@@ -15,22 +15,7 @@ void SplashScreen(int pozycjaY, int zwloka, int czekaj)
     maxLengthLine = Math.Max(maxLengthLine, lineSplashScreen[2].Length);
     Console.CursorVisible = false;
     var pozycjaX = ((Console.BufferWidth - maxLengthLine + 4) / 2) - 4;
-    Console.SetCursorPosition(pozycjaX, pozycjaY);
-    Console.ForegroundColor = ConsoleColor.DarkBlue;
-    Console.Write("╔");
-    for (int i = 0; i < maxLengthLine + 2; i++) Console.Write("═");
-    Console.Write("╗");
-    for (int i = 0; i < 3; i++)
-    {
-        Console.SetCursorPosition(pozycjaX, pozycjaY + i + 1);
-        Console.Write("║");
-        Console.SetCursorPosition(pozycjaX + maxLengthLine + 3, pozycjaY + i + 1);
-        Console.Write("║");
-    }
-    Console.SetCursorPosition(pozycjaX, pozycjaY + 4);
-    Console.Write("╚");
-    for (int i = 0; i < maxLengthLine + 2; i++) Console.Write("═");
-    Console.Write("╝");
+    Frame(pozycjaX, pozycjaY, maxLengthLine + 4, 5, 1, 0);
     for (int j = 0; j < lineSplashScreen.Length; j++)
     {
         Console.SetCursorPosition(pozycjaX + 2, pozycjaY + 1 + j);
@@ -59,56 +44,35 @@ void SplashScreen(int pozycjaY, int zwloka, int czekaj)
 void MainFrame(int y, string line1, string line2)
 {
     var x = ((Console.BufferWidth - Math.Max(line1.Length, line2.Length)) / 2) - 3;
-    Console.SetCursorPosition(x, y);
-    Console.ForegroundColor = ConsoleColor.DarkBlue;
-    Console.Write("╔");
-    Console.SetCursorPosition(x, y);
-    Console.Write("╔");
-    for (var i = 0; i <= Math.Max(line1.Length, line2.Length) + 1; i++)
-    {
-        Console.Write("═");
-    }
-    Console.Write("╗");
-    var j = 1;
-    Console.SetCursorPosition(x, y + j);
-    Console.Write("║");
+    var h = 3;
+    if (line2.Length > 0) h = 4;
+    Frame(x, y, Math.Max(line1.Length, line2.Length) + 4, h, 1, 0);
     Console.ForegroundColor = ConsoleColor.Cyan;
-    if (line2.Length == 0)
-    {
-        Console.Write(" " + line1 + " ");
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Console.Write("║");
-    }
+    Console.SetCursorPosition(x + 2, y + 1);
+    if (line2.Length == 0) Console.Write(line1);
     else
     {
-        if (line1.Length >= line2.Length)
+        var j = (line1.Length - line2.Length) / 2;
+        if (j>=0)
         {
-            Console.Write(" " + line1 + " ");
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            int pozycjaX = Console.CursorLeft;
-            Console.Write("║");
-            j++;
-            Console.SetCursorPosition(x, y + j);
-            Console.Write("║");
-            for (var i = 0; i <= (line1.Length - line2.Length) / 2 + 1; i++)
+            while (j>0)
             {
-                Console.Write(" ");
+                line2 = ' ' + line2;
+                j--;
             }
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write(line2);
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.SetCursorPosition(pozycjaX, y + j);
-            Console.Write("║");
         }
+        else 
+        {
+            while (j > 0)
+            {
+                line1 = ' ' + line1;
+                j--;
+            }
+        }
+        Console.Write(line1);
+        Console.SetCursorPosition(x + 2, y + 2);
+        Console.Write(line2);
     }
-    j++;
-    Console.SetCursorPosition(x, y + j);
-    Console.Write("╚");
-    for (var i = 0; i <= Math.Max(line1.Length, line2.Length) + 1; i++)
-    {
-        Console.Write("═");
-    }
-    Console.Write("╝");
 }
 void CleanWindow(int x, int y, int width, int height, int foreGroundColor, int backGroundColor)
 {
@@ -144,35 +108,9 @@ void NavigationFrame(int y, string line1, string line2, string line3)
         if (line2.Length > 0) counter++;
         if (line3.Length > 0) counter++;
         var x = (116 - length) / 2;
-        var itemy = y;
         CleanWindow(0, y, 110, 5, 0, 0);
-        Console.SetCursorPosition(x, itemy);
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Console.Write("╔");
-        for (int i = 1; i <= length + 2; i++) Console.Write("═");
-        Console.WriteLine("╗");
-        Console.SetCursorPosition(x, itemy += 1);
-        Console.Write("║");
-        Console.SetCursorPosition(x + length + 3, itemy);
-        Console.WriteLine("║");
-        for (int i = 1; i <= counter * 2 - 1; i++)
-        {
-            Console.SetCursorPosition(x, itemy += 1);
-            Console.Write("║");
-            Console.SetCursorPosition(x + length + 3, itemy);
-            Console.WriteLine("║");
-        }
-        if(counter == 1) 
-        {
-            Console.SetCursorPosition(x, itemy += 1);
-            Console.Write("║");
-            Console.SetCursorPosition(x + length + 3, itemy);
-            Console.WriteLine("║");
-        }
-        Console.SetCursorPosition(x, itemy += 1);
-        Console.Write("╚");
-        for (int i = 1; i <= length + 2; i++) Console.Write("═");
-        Console.Write("╝");
+        var dy = -1 + counter;
+        Frame(x, y - dy, length + 4, counter + 4, 4, 0);
         Console.SetCursorPosition(x + 2, y);
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(" NAWIGACJA ");
@@ -219,6 +157,36 @@ void MarkRow(int x, int y, string line, int foreGroundColor, int backGroundColor
     Console.Write(line);
     Console.ForegroundColor = (ConsoleColor)currentForegroundColor;
     Console.BackgroundColor = (ConsoleColor)currentBackgroundColor;
+}
+void Frame(int left, int top, int with, int hight, int foreGroundColor, int backGroundColor) 
+{
+    // 0-Black 1-DarkBlue 2-DarkGreen 3-DarkCyan 4-DarkRed 5-DarkMagenta 6-DarkYellow
+    // 7-Gray 8-DarkGray 9-Blue 10-Green 11-Cyan 12-Red 13-Magenta 14-Yellow 15-White
+    ConsoleColor currentForegroundColor = Console.ForegroundColor;
+    ConsoleColor currentBackgroundColor = Console.BackgroundColor;
+    Console.ForegroundColor = (ConsoleColor)foreGroundColor;
+    Console.BackgroundColor = (ConsoleColor)backGroundColor;
+    Console.SetCursorPosition(left, top);
+    Console.Write('╔');
+    Console.SetCursorPosition(left, top);
+    Console.Write('╔');
+    for (int i = 0; i < with - 2; i++) Console.Write('═');
+    Console.Write('╗');
+    int j = 1;
+    for (j = 1 ; j < hight - 1; j++)
+    {
+        Console.SetCursorPosition(left, top + j);
+        Console.Write('║');
+        for (int k = 0; k < with - 2; k++)
+        {
+            Console.Write(" ");
+        }
+        Console.Write('║');
+    }
+    Console.SetCursorPosition(left, top + j);
+    Console.Write('╚');
+    for (int i = 0; i < with - 2; i++) Console.Write('═');
+    Console.Write('╝');
 }
 void EmployeeAddGrade(int left, int top, char c) 
 {
@@ -382,9 +350,14 @@ void LoadEmployee(char c)
 {
     if (!Directory.Exists("DANE PRACOWNIKÓW"))
     {
+        CleanWindow(45, 8, 30, 15, 0, 0);
+        Frame(50, 12, 19, 5, 13, 0);
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.SetCursorPosition(54, 12);
+        Console.Write(" U W A G A ");
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.SetCursorPosition((Console.BufferWidth - "BRAK DANYCH!".Length) / 2, 13);
-        Console.Write("BRAK DANYCH!");
+        Console.SetCursorPosition(53, 14);
+        Console.Write("BRAK DANYCH !");
         Thread.Sleep(3000);
         FileEmployee(2);
     }
@@ -393,9 +366,14 @@ void LoadEmployee(char c)
         string[] txtFiles = Directory.GetFiles("DANE PRACOWNIKÓW/", "*.txt");
         if (txtFiles.Length == 0)
         {
+            CleanWindow(45, 8, 30, 15, 0, 0);
+            Frame(50, 12, 19, 5, 13, 0);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(54, 12);
+            Console.Write(" U W A G A ");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition((Console.BufferWidth - "BRAK DANYCH!".Length) / 2, 13);
-            Console.Write("BRAK DANYCH!");
+            Console.SetCursorPosition(53, 14);
+            Console.Write("BRAK DANYCH !");
             Thread.Sleep(3000);
             FileEmployee(2);
         }
@@ -436,22 +414,7 @@ void LoadEmployee(char c)
             Console.SetCursorPosition(x + 4, y - 1);
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write(" LISTA PRACOWNIKÓW ");
-            Console.SetCursorPosition(x, y);
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("╔");
-            for (int i = 0; i < 25; i++) Console.Write("═");
-            Console.Write("╗");
-            for (int j = 1; j < 16; j++)
-            {
-                Console.SetCursorPosition(x, y + j);
-                Console.Write("║");
-                for (int i = 0; i < 25; i++) Console.Write(" ");
-                Console.Write("║");
-            }
-            Console.SetCursorPosition(x, y + 16);
-            Console.Write("╚");
-            for (int i = 0; i < 25; i++) Console.Write("═");
-            Console.Write("╝");
+            Frame(x, y, 27, 17, 15, 0);
             for (int j = 0; j < employeeList.Count; j++)
             {
                 var buffor = employeeList[j];
@@ -474,7 +437,7 @@ void LoadEmployee(char c)
                     switch (key.Key)
                     {
                         case ConsoleKey.Escape:
-                            { 
+                            {
                                 if (c == 'k') FileEmployee(3);
                                 else FileEmployee(2);
                                 break;
@@ -533,8 +496,8 @@ void LoadEmployee(char c)
                                     string asa = Directory.GetCurrentDirectory();
                                     File.Delete(txtFiles[positionInList]);
                                     string[] nowaTablica = new string[txtFiles.Length - 1]; // Tworzę nową tablicę o rozmiarze mniejszym o jeden
-                                    Array.Copy(txtFiles, 0, nowaTablica, 0, positionInList); // Kopiujemy elementy przed elementem który chcemy usunąć
-                                    Array.Copy(txtFiles, positionInList + 1, nowaTablica, positionInList, txtFiles.Length - positionInList - 1); // Kopiujemy elementy po elemencie który chcemy usunąć
+                                    Array.Copy(txtFiles, 0, nowaTablica, 0, positionInList); // Kopiuję elementy przed elementem który chcemy usunąć
+                                    Array.Copy(txtFiles, positionInList + 1, nowaTablica, positionInList, txtFiles.Length - positionInList - 1); // Kopiuję elementy po elemencie który chcemy usunąć
                                     txtFiles = nowaTablica; // Aktualizujemy referencję tablicy
 
                                     employeeList.Remove(employeeList[positionInList]);
@@ -604,27 +567,27 @@ void LoadEmployee(char c)
                                     Console.CursorVisible = true;
                                     Console.SetCursorPosition(x + 9, y - 1);
                                     Console.WriteLine(" DANE PRACOWNIKA ");
-                                    Console.SetCursorPosition(x, y);
-                                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                                    Console.WriteLine("╔═════════════════════════════════╗");
-                                    Console.SetCursorPosition(x, y + 1);
-                                    Console.WriteLine("║           IMIĘ :                ║");
-                                    Console.SetCursorPosition(x + 19, y + 1);
-                                    Console.WriteLine(employeeData[0]);
-                                    Console.SetCursorPosition(x, y + 2);
-                                    Console.WriteLine("║       NAZWISKO :                ║");
-                                    Console.SetCursorPosition(x + 19, y + 2);
-                                    Console.WriteLine(employeeData[1]);
-                                    Console.SetCursorPosition(x, y + 3);
-                                    Console.WriteLine("║ DATA URODZENIA :                ║");
-                                    Console.SetCursorPosition(x + 19, y + 3);
-                                    Console.WriteLine(employeeData[2]);
-                                    Console.SetCursorPosition(x, y + 4);
-                                    Console.WriteLine("║           PŁEĆ :                ║");
-                                    Console.SetCursorPosition(x + 19, y + 4);
-                                    Console.WriteLine(employeeData[3]);
-                                    Console.SetCursorPosition(x, y + 5);
-                                    Console.WriteLine("╚═════════════════════════════════╝");
+                                    Frame(x, y, 35, 6, 3, 0);
+                                    Console.SetCursorPosition(x + 12, y + 1);
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("IMIĘ : ");
+                                    Console.ForegroundColor= ConsoleColor.Green;
+                                    Console.Write(employeeData[0]);
+                                    Console.SetCursorPosition(x + 8, y + 2);
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("NAZWISKO : ");
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.Write(employeeData[1]);
+                                    Console.SetCursorPosition(x + 2, y + 3);
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("DATA URODZENIA : ");
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.Write(employeeData[2]);
+                                    Console.SetCursorPosition(x + 12, y + 4);
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("PŁEĆ : ");
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.Write(employeeData[3]);
                                     CleanWindow(30, 23, 130, 6, 0, 0);
                                     NavigationFrame(23, " Można dodać ocenę z przedziału [0..50] ", "    lub [A..F].  Znak Q / q wyjście. ", "");
                                     EmployeeAddGrade(138, 1, 'f');
@@ -645,21 +608,29 @@ void FileEmployee(int poz)
     var x = 45;
     var y = 9;
     Console.Clear();
-    MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PLIKACH");
+    switch (poz) 
+    {
+        case 1:
+            {
+                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PAMIĘCI");
+            }
+            break;
+        case 2: 
+            {
+                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PLIKU");
+            }
+            break;
+        case 3:
+            {
+                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PLIKU");
+            }
+            break;
+
+    }
     NavigationFrame(23, "[1..4] lub ↑/↓ - wybór Enter - potwierdzenie ESC - wyjście", "", "");
     Console.CursorVisible = false;
     string[] menu = [" 1 - NOWY PRACOWNIK     ", " 2 - WCZYTAJ PRACOWNIKA ", " 3 - KASUJ PRACOWNIKA   ", " 4 - WYJŚCIE            "];
-    Console.ForegroundColor = ConsoleColor.DarkYellow;
-    Console.SetCursorPosition(x, y);
-    Console.WriteLine("╔══════════════════════════╗");
-    var itemy = y;
-    for (int i = 0; i < 9; i++)
-    {
-        Console.SetCursorPosition(x, itemy += 1);
-        Console.WriteLine("║                          ║");
-    }
-    Console.SetCursorPosition(x, itemy += 1);
-    Console.WriteLine("╚══════════════════════════╝");
+    Frame(x, y, 28, 11, 6, 0);
     for (int i = 0; i < 4; i++) UnmarkRow(x, y + (i + 1) * 2, menu[i], 10, 0);
     MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
     var requirement = true;
@@ -1107,22 +1078,25 @@ void MemoryEmployee(int left, int top)
 void MainMenu(int y, int poz)
 {
     Console.Clear();
-    MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PAMIĘCI");
+    switch (poz)
+    {
+        case 1:
+            {
+                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PAMIĘCI");
+            }
+            break;
+        case 2:
+            {
+                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PLIKU");
+            }
+            break;
+    }
     NavigationFrame(21, "[1..3] lub ↑/↓ - wybór i Enter - potwierdzenie. ESC - wyjście.", "", "");
     Console.CursorVisible = false;
-    var x = (Console.BufferWidth - "╔══════════════════════════╗".Length) / 2;
-    Console.SetCursorPosition(x, y);
-    Console.ForegroundColor = ConsoleColor.Magenta;
+    var x = 46;
+    Frame
+        (x, y, 28, 9, 13, 0);
     string[] menu = [" 1 - OPERCJE NA PAMIĘCI ", " 2 - OPERCJE NA PLIKU   ", " 3 - WYJŚCIE            "];
-    Console.WriteLine("╔══════════════════════════╗");
-    var itemy = y;
-    for (int i = 0; i < 7; i++)
-    {
-        Console.SetCursorPosition(x, itemy += 1);
-        Console.WriteLine("║                          ║");
-    }
-    Console.SetCursorPosition(x, itemy += 1);
-    Console.WriteLine("╚══════════════════════════╝");
     for (int i = 0; i < 3; i++) UnmarkRow(x, y + (i + 1) * 2, menu[i], 10, 0);
     MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
     var requirement = true;
@@ -1133,33 +1107,63 @@ void MainMenu(int y, int poz)
         {
             case ConsoleKey.UpArrow:
                 {
-                    if (poz == 1)
+                    switch (poz) 
                     {
-                        UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
-                        poz = 3;
-                        MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                    }
-                    else
-                    {
-                        UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
-                        poz--;
-                        MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
+                        case 1:
+                            {
+                                UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
+                                poz = 3;
+                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
+                                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "WYJŚCIE");
+                            }
+                            break;
+                        case 2:
+                            {
+                                UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
+                                poz--;
+                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
+                                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PAMIĘCI");
+                            }
+                            break;
+                        case 3:
+                            {
+                                UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
+                                poz--;
+                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
+                                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PLIKU");
+                            }
+                            break;
                     }
                     break;
                 }
             case ConsoleKey.DownArrow:
                 {
-                    if (poz == 3)
+                    switch (poz) 
                     {
-                        UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
-                        poz = 1;
-                        MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                    }
-                    else
-                    {
-                        UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
-                        poz++;
-                        MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
+                        case 1:
+                            {
+                                UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
+                                poz++;
+                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
+                                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PLIKU");
+                            }
+                            break;
+                        case 2:
+                            {
+                                UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
+                                poz++;
+                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
+                                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "WYJŚCIE");
+                            }
+                            break;
+                        case 3:
+                            {
+                                UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
+                                poz = 1;
+                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
+                                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PAMIĘCI");
+                            }
+                            break;
                     }
                     break;
                 }
@@ -1200,12 +1204,14 @@ void MainMenu(int y, int poz)
                     {
                         case '1':
                             {
+                                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PLIKU");
                                 MemoryEmployee(45, 5);
                                 break;
                             }
                         case '2':
                             {
-                                FileEmployee(1);
+                                MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "OPERACJE NA PAMIĘCI");
+                                FileEmployee(2);
                                 break;
                             }
                         case '3':
@@ -1229,157 +1235,5 @@ void MainMenu(int y, int poz)
 
     }
 }
-void MenuFrame(int y, int poz)
-{
-    Console.Clear();
-    MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "WERSJA Z ZAPISEM DO PAMIĘCI");
-    MainFrame(2, "PROGRAM DO WYSTAWIANIA OCEN PRACOWNIKOM", "WERSJA Z ZAPISEM DO PAMIĘCI");
-    NavigationFrame(20, "[1..4] lub ↑/↓ - wybór. Enter - potwierdzenie. ESC - wyjście.", "", "");
-    Console.CursorVisible = false;
-    var x = (Console.BufferWidth - 28) / 2;
-    Console.SetCursorPosition(x, y);
-    Console.ForegroundColor = ConsoleColor.Magenta;
-    string[] menu = { " 1 - DODAJ PRACOWNKA    ", " 2 - WCZYTAJ PRACOWNIKA ", " 3 - STATYSTYKI       ", " 4 - WYJŚCIE          " };
-    Console.WriteLine("╔══════════════════════════╗");
-    var itemy = y;
-    for (int i = 0; i < 9; i++)
-    {
-        Console.SetCursorPosition(x, itemy += 1);
-        Console.WriteLine("║                          ║");
-    }
-    Console.SetCursorPosition(x, itemy += 1);
-    Console.WriteLine("╚══════════════════════════╝");
-    for (int i = 0; i < 4; i++) UnmarkRow(x, y + (i + 1) * 2, menu[i], 10, 0);
-    MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-    var tru = true;
-    while (tru)
-    {
-        Console.SetCursorPosition(x + 4, y + poz * 2);
-        ConsoleKeyInfo keyPressed = Console.ReadKey();
-        switch (keyPressed.Key)
-        {
-            case ConsoleKey.UpArrow:
-                {
-                    if (poz == 1)
-                    {
-                        UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
-                        poz = 4;
-                        MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                    }
-                    else
-                    {
-                        UnmarkRow(x, y + poz * 2, menu[poz - 1], 10, 0);
-                        poz--;
-                        MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                    }
-                    break;
-                }
-            case ConsoleKey.DownArrow:
-                {
-                    if (poz == 4)
-                    {
-                        UnmarkRow(x, y + (poz) * 2, menu[poz - 1], 10, 0);
-                        poz = 1;
-                        MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                    }
-                    else
-                    {
-                        UnmarkRow(x, y + (poz) * 2, menu[poz - 1], 10, 0);
-                        poz++;
-                        MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                    }
-                    break;
-                }
-            case ConsoleKey.Enter:
-                {
-                    switch (poz)
-                    {
-                        case 1:
-                            {
-                                //                                NoweDane();
-                                MenuFrame(7, 1);
-                                break;
-                            }
-                        case 2:
-                            {
-                                //                                DataReadingFrame(14, 7, 1);
-                                MenuFrame(7, 2);
-                                break;
-                            }
-                        case 3:
-                            {
-                                //                              StatisticsFrame();
-                                break;
-                            }
-                        default:
-                            {
-                                Console.Clear();
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Environment.Exit(0);
-                                break;
-                            }
-                    }
-                    break;
-                }
-            case ConsoleKey.Escape:
-                {
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Environment.Exit(0);
-                    break;
-                }
-            default:
-                {
-                    Console.CursorVisible = false;
-                    switch (keyPressed.KeyChar)
-                    {
-                        case '1':
-                            {
-                                UnmarkRow(x, y + (poz) * 2,  menu[poz - 1], 10, 0);
-                                poz = 1;
-                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                                Thread.Sleep(300);
-                                //                                NoweDane();
-                                MenuFrame(7, 1);
-                                break;
-                            }
-                        case '2':
-                            {
-                                UnmarkRow(x, y + (poz) * 2,  menu[poz - 1], 10, 0);
-                                poz = 2;
-                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                                Thread.Sleep(300);
-                                //                                DataReadingFrame(14, 7, 1);
-                                MenuFrame(7, 2);
-                                break;
-                            }
-                        case '3':
-                            {
-                                UnmarkRow(x, y + (poz) * 2, menu[poz - 1], 10, 0);
-                                poz = 3;
-                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                                Thread.Sleep(300);
-                                //                                StatisticsFrame();
-                                break;
-                            }
-                        default:
-                            {
-                                UnmarkRow(x, y + (poz) * 2, menu[poz - 1], 10, 0);
-                                poz = 4;
-                                MarkRow(x, y + poz * 2, menu[poz - 1], 15, 1);
-                                Thread.Sleep(300);
-                                Console.Clear();
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Environment.Exit(0);
-                                break;
-                            }
-
-                    }
-                    break;
-                }
-        }
-    }
-}
 SplashScreen(10,70,1300);
 MainMenu(9, 1);
-MenuFrame(7, 1);
