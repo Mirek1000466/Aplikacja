@@ -21,7 +21,7 @@ namespace Aplikacja.Tests
         }
 
         [Test]
-        public void WhenCharAdded_ShouldAddedpoints()
+        public void WhenCharAdded_ShouldAddedPoints()
         {
             // arrange
             var employee = new EmployeeMemory("Jan", "Nowak", "15-08-2001", "Mê¿czyzna");

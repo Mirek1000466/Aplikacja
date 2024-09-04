@@ -13,6 +13,6 @@ namespace Aplikacja
         void AddGrade(float grade);
         void AddGrade(string grade);
         void AddGrade(char grade);
-        Statistics GetStatistics();
+        Statistics GetStatistics(); 
     }
 }

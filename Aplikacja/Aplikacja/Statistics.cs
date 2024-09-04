@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-//using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Aplikacja
+﻿namespace Aplikacja
 {
     public class Statistics
     {
@@ -53,6 +47,6 @@ namespace Aplikacja
             this.Max = Math.Max(grade, this.Max);
             this.Count++;
             this.Sum += grade;
-        }
+        } 
     }
 }
